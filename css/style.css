@@ -83,6 +83,21 @@ h5 span {
   transition: 0.2s;
 }
 
+.love-button {
+  color: #ec407a !important;
+  border: #ec407a solid 2px !important;
+}
+
+.love-button:hover {
+  background-color: #ec407a !important;
+  color: white !important;
+}
+
+.love-button-active {
+  background-color: #ec407a !important;
+  color: white !important;
+}
+
 .report-button {
   margin-top: 20px;
   padding: 10px 18px;

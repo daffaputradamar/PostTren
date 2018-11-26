@@ -80,8 +80,14 @@
                                         <p>
                                             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos soluta distinctio ab explicabo cumque! Accusamus qui ab magnam, cum voluptatem a accusantium illo? Dolorum, molestiae cum soluta optio accusamus sint.
                                         </p>
-                                        <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span></button>
-                                        <p style="margin-top: 5px;"></p>
+                                        <div class="row">
+                                            <div class="col s3">
+                                                <button class="submit-button love-button love-button-active" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span></button>
+                                            </div>
+                                            <div class="col s3">
+                                                <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span></button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="divider" style="margin: 15px 0"></div>
@@ -102,8 +108,14 @@
                                         <p>
                                             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos soluta distinctio ab explicabo cumque! Accusamus qui ab magnam, cum voluptatem a accusantium illo? Dolorum, molestiae cum soluta optio accusamus sint.
                                         </p>
-                                        <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span></button>
-                                        <p style="margin-top: 5px;"></p>
+                                        <div class="row">
+                                            <div class="col s3">
+                                                <button class="submit-button love-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span></button>
+                                            </div>
+                                            <div class="col s3">
+                                                <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span></button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
