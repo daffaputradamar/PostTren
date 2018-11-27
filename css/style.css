@@ -93,6 +93,11 @@ h5 span {
   color: white !important;
 }
 
+.love-button:focus {
+  background-color: #ec407a !important;
+  color: white !important;
+}
+
 .love-button-active {
   background-color: #ec407a !important;
   color: white !important;
