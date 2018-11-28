@@ -119,6 +119,11 @@ h5 span {
   transition: 0.2s;
 }
 
+.edit-button {
+  border: none !important;
+  /* background-color: white !important; */
+}
+
 .form-login {
   margin-top: 30px;
 }

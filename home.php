@@ -10,35 +10,7 @@
         <div class="container">
             <div class="row">
                 <div class="col s3">
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="row">
-                                <div class="col s3">
-                                    <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="70">
-                                </div>
-                                <div class="col s9">
-                                    <div style="margin-top: 30px; margin-left: 20px;">
-                                        <h6>username</h6>                                
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="divider"></div>
-                            <div class="row">
-                                <div class="col s6">
-                                    <blockquote>
-                                        <h6>Posts</h6>
-                                        1
-                                    </blockquote>
-                                </div>
-                                <div class="col s6">
-                                    <blockquote>
-                                        <h6>Followers</h6>
-                                        1
-                                    </blockquote>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php include 'layouts/profile_card.php'; ?>
                 </div>
                 <div class="col s6">
                     <div class="card">
@@ -90,10 +62,21 @@
                                                     <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
                                                     <p><?=$row['username']?></p>
                                                 </div>
-                                                <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
-                                                <ul id='option-dropdown' class='dropdown-content'>
-                                                    <li><a class="red-text center" href="#!">Report</a></li>
-                                                </ul>
+                                                <div style="display:flex; align-items: center;">
+                                                    <form action="actions/update_post.php" method="post" style="margin-right: 10px">
+                                                        <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
+                                                        <input type="hidden" name="kd_user" value="<?=$row['kd_user']?>">
+                                                        <button type="submit" class="submit-button" style="padding: 2px; margin:0;border-radius: 10px">
+                                                            <i class="material-icons">edit</i> 
+                                                        </button>
+                                                    </form>
+                                                    <form action="actions/report_post.php" method="post">
+                                                        <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
+                                                        <button type="submit" class="report-button" style="padding: 5px 4px 2px 4px; margin:0;border-radius: 10px">
+                                                            <i class="tiny material-icons">report</i> 
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </div>
                                             <div class="divider" style="margin-bottom:10px"></div>
                                             <?php if ($row['photo'] != NULL) { ?>
@@ -104,7 +87,24 @@
                                             </p>
                                             <div class="row">
                                                 <div class="col s3">
-                                                    <button class="submit-button love-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span></button>
+                                                <?php 
+                                                        $post = $row['kd_post'];
+                                                        $query = "SELECT * FROM likes WHERE kd_post = $post AND kd_user = 1 LIMIT 1";
+                                                        $res = mysqli_query($con, $query);
+                                                        if (mysqli_fetch_assoc($res)) {
+                                                    ?>
+                                                        <form action="actions/add_like.php" method="post">
+                                                            <input type="hidden" name="kd_post" value=<?=$post?>>
+                                                            <button class="submit-button love-button love-button-active" type="submit" name="submit-like" id="fav-btn" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span>
+                                                            </button>
+                                                        </form>
+                                                    <?php } else { ?>
+                                                        <form action="actions/add_like.php" method="post">
+                                                            <input type="hidden" name="kd_post" value=<?=$post?>>
+                                                            <button class="submit-button love-button" type="submit" name="submit-like" id="fav-btn" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span>
+                                                            </button>
+                                                        </form>
+                                                    <?php } ?>
                                                 </div>
                                                 <div class="col s3">
                                                     <a href="post.php?kd_post=<?= $row['kd_post'] ?>"><button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;" > <i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span> </button>
@@ -114,69 +114,8 @@
                                         </div>
                                     </div>
                                 <?php 
-                                    } 
-                                    mysqli_close($con);
+                                    }
                                 ?>
-                                <div class="row">
-                                    <div class="col s2">
-                                        <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="60">
-                                    </div>
-                                    <div class="col s10">
-                                        <div style="display:flex; align-items: center; justify-content: space-between">
-                                            <div>
-                                                <h6>First Last</h6>
-                                                <p>username</p>
-                                            </div>
-                                            <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
-                                            <ul id='option-dropdown' class='dropdown-content'>
-                                                <li><a class="red-text center" href="#!">Report</a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="divider" style="margin-bottom:10px"></div>
-                                        <p>
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos soluta distinctio ab explicabo cumque! Accusamus qui ab magnam, cum voluptatem a accusantium illo? Dolorum, molestiae cum soluta optio accusamus sint.
-                                        </p>
-                                        <div class="row">
-                                            <div class="col s3">
-                                                <button class="submit-button love-button love-button-active" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span></button>
-                                            </div>
-                                            <div class="col s3">
-                                                <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="divider" style="margin: 15px 0"></div>
-                                <div class="row">
-                                    <div class="col s2">
-                                        <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="60">
-                                    </div>
-                                    <div class="col s10">
-                                        <div style="display:flex; align-items: center; justify-content: space-between">
-                                            <div>
-                                                <h6>First Last</h6>
-                                                <p>username</p>
-                                            </div>
-                                            <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
-                                            <ul id='option-dropdown' class='dropdown-content'>
-                                                <li><a class="red-text center" href="#!">Report</a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="divider" style="margin-bottom:10px"></div>
-                                        <img src="assets/posts/brown3.jpg" alt="" class="responsive-img">
-                                        <p>
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos soluta distinctio ab explicabo cumque! Accusamus qui ab magnam, cum voluptatem a accusantium illo? Dolorum, molestiae cum soluta optio accusamus sint.
-                                        </p>
-                                        <div class="row">
-                                            <div class="col s3">
-                                                <button class="submit-button love-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span></button>
-                                            </div>
-                                            <div class="col s3">
-                                                <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -211,7 +150,10 @@
                 </div>
             </div>
         </div>
-
+        <noscript>
+            <input type="submit" value="Submit form!" />
+        </noscript>
+        <?php mysqli_close($con) ?>
         <?php include 'layouts/scripts.php'; ?>
     </body>
 </html>

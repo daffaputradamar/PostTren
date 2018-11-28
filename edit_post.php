@@ -46,21 +46,10 @@
                                                     <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
                                                     <p><?=$row['username']?></p>
                                                 </div>
-                                                <div style="display:flex; align-items: center;">
-                                                    <form action="actions/update_post.php" method="post" style="margin-right: 10px">
-                                                        <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
-                                                        <input type="hidden" name="kd_user" value="<?=$row['kd_user']?>">
-                                                        <button type="submit" class="submit-button" style="padding: 2px; margin:0;border-radius: 10px">
-                                                            <i class="material-icons">edit</i> 
-                                                        </button>
-                                                    </form>
-                                                    <form action="actions/report_post.php" method="post">
-                                                        <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
-                                                        <button type="submit" class="report-button" style="padding: 5px 4px 2px 4px; margin:0;border-radius: 10px">
-                                                            <i class="tiny material-icons">report</i> 
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                                <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
+                                                <ul id='option-dropdown' class='dropdown-content'>
+                                                    <li><a class="red-text center" href="#!">Report</a></li>
+                                                </ul>
                                             </div>
                                             <div class="divider" style="margin-bottom:10px"></div>
                                             <?php if ($row['photo'] != NULL) { ?>
@@ -126,14 +115,10 @@
                                                         <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
                                                     <p><?=$row['username']?></p>
                                                     </div>
-                                                    <div style="display:flex; align-items: center;">
-                                                        <form action="actions/report_comment.php" method="post">
-                                                            <input type="hidden" name="kd_comment" value="<?=$row['kd_comment']?>">
-                                                            <button type="submit" class="report-button" style="padding: 5px 4px 2px 4px; margin:0;border-radius: 10px">
-                                                                <i class="tiny material-icons">report</i> 
-                                                            </button>
-                                                        </form>
-                                                    </div>
+                                                    <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
+                                                    <ul id='option-dropdown' class='dropdown-content'>
+                                                        <li><a class="red-text center" href="#!">Report</a></li>
+                                                    </ul>
                                                 </div>
                                                 <div class="divider" style="margin: 5px 0"></div>
                                                 <p><?=$row['body_comment']?></p>
@@ -143,6 +128,15 @@
                                         }
                                         mysqli_close($con);
                                     ?>
+                                    <div class="row">
+                                        <div class="col s2 center-align">
+                                            <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="40">
+                                        </div>
+                                        <div class="col s10">
+                                            <h6>Username</h6>
+                                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci accusamus cupiditate magni fuga quidem porro neque facilis cum quae dignissimos!</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -1,3 +1,9 @@
+<?php
+    include 'helper/connection.php';
+
+    $kd_user_profile = $_GET['kd_user'];
+?>
+
 <!DOCTYPE html>
 <html>
     <?php include 'layouts/header.php'; ?>
@@ -8,35 +14,7 @@
         <div class="container">
             <div class="row">
                 <div class="col s3">
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="row">
-                                <div class="col s3">
-                                    <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="70">
-                                </div>
-                                <div class="col s9">
-                                    <div style="margin-top: 30px; margin-left: 20px;">
-                                        <h6>username</h6>                                
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="divider"></div>
-                            <div class="row">
-                                <div class="col s6">
-                                    <blockquote>
-                                        <h6>Posts</h6>
-                                        1
-                                    </blockquote>
-                                </div>
-                                <div class="col s6">
-                                    <blockquote>
-                                        <h6>Followers</h6>
-                                        1
-                                    </blockquote>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php include 'layouts/profile_card.php'; ?>
                 </div>
                 <div class="col s6">
                     <div class="card">
@@ -64,48 +42,67 @@
                     <div class="card">
                         <div class="card-content">
                             <div>
-                                <div class="row">
-                                    <div class="col s2">
-                                        <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="60">
-                                    </div>
-                                    <div class="col s10">
-                                        <div style="display:flex; align-items: center; justify-content: space-between">
-                                            <h6>username</h6>
-                                            <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
-                                            <ul id='option-dropdown' class='dropdown-content'>
-                                                <li><a class="red-text center" href="#!">Report</a></li>
-                                            </ul>
+                                <?php 
+                                    $query = "SELECT * FROM posts p 
+                                        INNER JOIN users u ON p.kd_user = u.kd_user
+                                        WHERE p.kd_user = $kd_user_profile
+                                        ORDER BY created_at DESC";
+                                    $result = mysqli_query($con, $query);
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                ?>
+                                    <div class="row">
+                                        <div class="col s2">
+                                            <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="60">
                                         </div>
-                                        <div class="divider" style="margin-bottom:10px"></div>
-                                        <p>
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos soluta distinctio ab explicabo cumque! Accusamus qui ab magnam, cum voluptatem a accusantium illo? Dolorum, molestiae cum soluta optio accusamus sint.
-                                        </p>
-                                        <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span></button>
-                                        <p style="margin-top: 5px;"></p>
-                                    </div>
-                                </div>
-                                <div class="divider" style="margin: 15px 0"></div>
-                                <div class="row">
-                                    <div class="col s2">
-                                        <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="60">
-                                    </div>
-                                    <div class="col s10">
-                                        <div style="display:flex; align-items: center; justify-content: space-between">
-                                            <h6>username</h6>
-                                            <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
-                                            <ul id='option-dropdown' class='dropdown-content'>
-                                                <li><a class="red-text center" href="#!">Report</a></li>
-                                            </ul>
+                                        <div class="col s10">
+                                            <div style="display:flex; align-items: center; justify-content: space-between">
+                                                <div>
+                                                    <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
+                                                    <p><?=$row['username']?></p>
+                                                </div>
+                                                <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
+                                                <ul id='option-dropdown' class='dropdown-content'>
+                                                    <li><a class="red-text center" href="#!">Report</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="divider" style="margin-bottom:10px"></div>
+                                            <?php if ($row['photo'] != NULL) { ?>
+                                                <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img">
+                                            <?php } ?>
+                                            <p>
+                                                <?= $row['body'] ?>
+                                            </p>
+                                            <div class="row">
+                                                <div class="col s3">
+                                                <?php 
+                                                        $post = $row['kd_post'];
+                                                        $query = "SELECT * FROM likes WHERE kd_post = $post AND kd_user = 1 LIMIT 1";
+                                                        $res = mysqli_query($con, $query);
+                                                        if (mysqli_fetch_assoc($res)) {
+                                                    ?>
+                                                        <form action="actions/add_like.php" method="post">
+                                                            <input type="hidden" name="kd_post" value=<?=$post?>>
+                                                            <button class="submit-button love-button love-button-active" type="submit" name="submit-like" id="fav-btn" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span>
+                                                            </button>
+                                                        </form>
+                                                    <?php } else { ?>
+                                                        <form action="actions/add_like.php" method="post">
+                                                            <input type="hidden" name="kd_post" value=<?=$post?>>
+                                                            <button class="submit-button love-button" type="submit" name="submit-like" id="fav-btn" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span>
+                                                            </button>
+                                                        </form>
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="col s3">
+                                                    <a href="post.php?kd_post=<?= $row['kd_post'] ?>"><button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;" > <i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span> </button>
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="divider" style="margin-bottom:10px"></div>
-                                        <img src="assets/posts/brown3.jpg" alt="" class="responsive-img">
-                                        <p>
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dignissimos soluta distinctio ab explicabo cumque! Accusamus qui ab magnam, cum voluptatem a accusantium illo? Dolorum, molestiae cum soluta optio accusamus sint.
-                                        </p>
-                                        <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Comment</span></button>
-                                        <p style="margin-top: 5px;"></p>
                                     </div>
-                                </div>
+                                <?php 
+                                    }
+                                ?>
                             </div>
                         </div>
                     </div>
