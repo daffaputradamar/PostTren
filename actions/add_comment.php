@@ -1,10 +1,20 @@
 <?php
 
-include '../helper/connection.php';
+include '../helper/connection.php'; 
+    session_start();
+
+    if (!isset($_SESSION['user'])) {
+        header('Location: index.php');
+}
 
 if (isset($_POST['submit-comment'])) {
+    if (empty($_POST['body-comment'])) {
+        $error = urldecode("Komentar tidak berhasil ditambahakan");
+        header("Location:../post.php?kd_post=$kd_post&error=$error");
+    }
+    
     $body_comment = $_POST['body-comment'];
-    $kd_user = 1;
+    $kd_user = $_SESSION['user'];
     $kd_post = $_POST['kd_post'];
 
     $query = "INSERT INTO comments (kd_user, body_comment, kd_post, created_at) 
@@ -14,7 +24,6 @@ if (isset($_POST['submit-comment'])) {
     if (mysqli_query($con, $query)) {
         header("Location:../post.php?kd_post=$kd_post");
     } else {
-        die(mysqli_error($con));
         $error = urldecode("Komentar tidak berhasil ditambahakan");
         header("Location:../post.php?kd_post=$kd_post&error=$error");
     }

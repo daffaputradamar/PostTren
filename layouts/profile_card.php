@@ -1,11 +1,9 @@
-<?php
-    include 'helper/connection.php';
-?>
+<?php $user_id = $_SESSION['user']; ?>
 <div class="card">
     <div class="card-content">
         <div class="row">
             <?php 
-                $query = "SELECT * from users WHERE kd_user = 1";
+                $query = "SELECT * from users WHERE kd_user = $user_id";
                 $result = mysqli_query($con, $query);
                 $row = mysqli_fetch_assoc($result);
             ?>

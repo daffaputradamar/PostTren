@@ -1,6 +1,12 @@
 <?php
     include 'helper/connection.php';
 
+    session_start();
+
+    if (!isset($_SESSION['user'])) {
+        header('Location: index.php');
+    }
+
     $kd_user_profile = $_GET['kd_user'];
 ?>
 
@@ -14,9 +20,56 @@
         <div class="container">
             <div class="row">
                 <div class="col s3">
-                    <?php include 'layouts/profile_card.php'; ?>
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="row">
+                                <?php 
+                                    $query = "SELECT * from users WHERE kd_user = $kd_user_profile";
+                                    $result = mysqli_query($con, $query);
+                                    $row = mysqli_fetch_assoc($result);
+                                ?>
+                                <div class="col s3">
+                                    <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="70">
+                                </div>
+                                <div class="col s9">
+                                    <div style="margin-top: 20px; margin-left: 20px;">
+                                        <div>
+                                            <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
+                                            <p><?=$row['username']?></p>
+                                        </div>           
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="row">
+                                <div class="col s6">
+                                    <blockquote>
+                                        <h6>Posts</h6>
+                                        <?php 
+                                            $query = "SELECT COUNT(kd_post) as post_sum FROM posts
+                                                WHERE kd_user = $kd_user_profile";
+                                            $result = mysqli_query($con, $query);
+                                            $row = mysqli_fetch_array($result);
+                                            if ($row) {
+                                                echo "$row[0]";
+                                            } else {
+                                                echo '0';
+                                            }
+                                        ?>
+                                    </blockquote>
+                                </div>
+                                <div class="col s6">
+                                    <blockquote>
+                                        <h6>Followers</h6>
+                                        1
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col s6">
+                    <?php if($_SESSION['user'] === $kd_user_profile) { ?>
                     <div class="card">
                         <div class="card-content">
                             <div class="row">
@@ -39,6 +92,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php } ?>
                     <div class="card">
                         <div class="card-content">
                             <div>
@@ -69,14 +123,19 @@
                                             <?php if ($row['photo'] != NULL) { ?>
                                                 <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img materialboxed">
                                             <?php } ?>
+                                            <br>
                                             <p>
                                                 <?= $row['body'] ?>
                                             </p>
+                                            <div class="right-align">
+                                                <a class="grey-text" href="post.php?kd_post=<?= $row['kd_post'] ?>"><small>Read More</small></a>
+                                            </div>
                                             <div class="row">
                                                 <div class="col s3">
-                                                <?php 
+                                                    <?php 
+                                                        $user_id = $_SESSION['user'];
                                                         $post = $row['kd_post'];
-                                                        $query = "SELECT * FROM likes WHERE kd_post = $post AND kd_user = 1 LIMIT 1";
+                                                        $query = "SELECT * FROM likes WHERE kd_post = $post AND kd_user = $user_id LIMIT 1";
                                                         $res = mysqli_query($con, $query);
                                                         if (mysqli_fetch_assoc($res)) {
                                                     ?>
@@ -112,25 +171,23 @@
                         <div class="card-content">
                             <div>
                                 <h6 style="margin-bottom:30px">Discover new people</h6>
-                                <div class="row" style="margin-top: 15px">
-                                    <div class="col s3" style="margin-top: 15px">
-                                        <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="35">
+                                <?php
+                                    $user_id = $_SESSION['user'];
+                                    $query = "SELECT * FROM users WHERE kd_user != $user_id ORDER BY RAND() LIMIT 3";
+                                    $result = mysqli_query($con, $query);
+                                    while($row = mysqli_fetch_assoc($result)) {
+                                ?>
+                                    <div class="row" style="margin-top: 15px">
+                                        <div class="col s3" style="margin-top: 15px">
+                                            <img src="assets/photo_profil/<?= $row['photo_profil'] ?>" class="circle" alt="photo profile" width="35">
+                                        </div>
+                                        <div class="col s6">
+                                            <p><?=$row['username']?></p>
+                                            <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;" href="#">Follow</button>
+                                        </div>
                                     </div>
-                                    <div class="col s6">
-                                        <p>Username</p>
-                                        <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;" href="#">Follow</button>
-                                    </div>
-                                </div>
-                                <div class="divider"></div>
-                                <div class="row" style="margin-top: 15px">
-                                    <div class="col s3" style="margin-top: 15px">
-                                        <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="35">
-                                    </div>
-                                    <div class="col s6">
-                                        <p>Username</p>
-                                        <button class="submit-button" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;" href="#">Follow</button>
-                                    </div>
-                                </div>
+                                    <div class="divider"></div>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>

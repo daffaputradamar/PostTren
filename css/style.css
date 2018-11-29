@@ -139,3 +139,7 @@ h5 span {
 .navLogo {
   font-size: 1.5rem !important;
 }
+
+.logout-li button {
+  cursor: pointer !important;
+}

@@ -1,10 +1,14 @@
 <?php
-include '../helper/connection.php';
+include '../helper/connection.php'; 
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    header('Location: index.php');
+}
 
 if(isset($_POST['submit-like'])) {
-    echo "tes";
     $kd_post = $_POST['kd_post'];
-    $kd_user = 1;
+    $kd_user = $_SESSION['user'];
 
     $query = "INSERT INTO likes VALUES ($kd_post, $kd_user)";
 

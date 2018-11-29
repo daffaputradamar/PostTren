@@ -1,5 +1,6 @@
 <?php
-    $query = "SELECT * FROM users WHERE kd_user = 1";
+    $user_id = $_SESSION["user"];
+    $query = "SELECT * FROM users WHERE kd_user = $user_id";
     $result = mysqli_query($con, $query);
     $row = mysqli_fetch_assoc($result);
 ?>
@@ -19,7 +20,7 @@
                     </li>
                     <li><a href="home.php"><button class="submit-button" style="border-radius: 5px; margin-top:13px;">New Post</button></a></li>
                     <ul id='profile-dropdown' class='dropdown-content'>
-                        <li><p class="black-text" style="padding-left:10px"><?=$row['first_name']?> <?=$row['last_name']?></p></li>
+                        <li><p class="black-text" style="padding-left:10px"><?=$row['first_name']?></li>
                         <li><p class="black-text" style="padding-left:10px"><?=$row['username']?></p></li>
                         <li class="divider" tabindex="-1"></li>
                         <li><a class="black-text" href="profile.php?kd_user=<?=$row['kd_user']?>"><i class="material-icons">person_outline</i>Profile</a></li>
@@ -28,7 +29,7 @@
                         <li>
                             <form action="actions/logout.php">
                                 <button style="border:none; background: transparent; width:100%;" class="black-text" type="submit">
-                                    <i class="material-icons">exit_to_app</i>Logout
+                                    <i class="tiny material-icons">exit_to_app</i>Logout
                                 </button>
                             </form>
                         </li>

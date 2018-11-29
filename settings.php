@@ -1,6 +1,12 @@
 <?php
     include 'helper/connection.php';
 
+    session_start();
+
+    if (!isset($_SESSION['user'])) {
+        header('Location: index.php');
+    }
+
     $kd_user_profile = $_GET['kd_user'];
 ?>
 

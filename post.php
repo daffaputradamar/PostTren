@@ -1,6 +1,12 @@
 <?php
     include 'helper/connection.php';
 
+    session_start();
+
+    if (!isset($_SESSION['user'])) {
+        header('Location: index.php');
+    }
+
     $kd_post = $_GET['kd_post'];
 
     if (isset($_GET['error'])) {
@@ -66,13 +72,15 @@
                                             <?php if ($row['photo'] != NULL) { ?>
                                                 <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img materialboxed">
                                             <?php } ?>
+                                            <br>
                                             <p>
                                                 <?= $row['body'] ?>
                                             </p>
                                             <div class="row">
                                                 <div class="col s3">
                                                     <?php 
-                                                        $query = "SELECT * FROM likes WHERE kd_post = $kd_post AND kd_user = 1 LIMIT 1";
+                                                        $user_id = $_SESSION['user'];
+                                                        $query = "SELECT * FROM likes WHERE kd_post = $kd_post AND kd_user = $user_id LIMIT 1";
                                                         $result = mysqli_query($con, $query);
                                                         if (mysqli_fetch_assoc($result)) {
                                                     ?>
@@ -99,7 +107,7 @@
                                         <form action="actions/add_comment.php" method="post">
                                             <input type="hidden" name="kd_post" value="<?=$kd_post?>">
                                             <div class="input-field col s12">
-                                                <textarea id="tweet_textarea" class="materialize-textarea" name="body-comment"></textarea>
+                                                <textarea id="tweet_textarea" class="materialize-textarea" name="body-comment" required></textarea>
                                                 <label for="tweet_textarea">Type your Comment</label>
                                             </div>
                                             <div class="right-align">
@@ -110,7 +118,7 @@
                                     <?php 
                                     $query = "SELECT * FROM comments c 
                                         INNER JOIN posts p ON c.kd_post = p.kd_post
-                                        INNER JOIN users u ON p.kd_user = u.kd_user
+                                        INNER JOIN users u ON c.kd_user = u.kd_user
                                         WHERE c.kd_post = $kd_post
                                         ORDER BY c.created_at DESC";
                                     $result = mysqli_query($con, $query);

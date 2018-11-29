@@ -1,10 +1,15 @@
 <?php
 
-include '../helper/connection.php';
+include '../helper/connection.php'; 
+    session_start();
+
+    if (!isset($_SESSION['user'])) {
+        header('Location: index.php');
+}
 
 if (isset($_POST['submit-post'])) {
     $body = $_POST['body'];
-    $kd_user = 1;
+    $kd_user = $_SESSION['user'];
     $code = $_FILES['post-photo']["error"];
     if ($code !== 4) {
         $destination_path = getcwd();
