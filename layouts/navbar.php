@@ -1,6 +1,4 @@
 <?php
-    include 'helper/connection.php';
-
     $query = "SELECT * FROM users WHERE kd_user = 1";
     $result = mysqli_query($con, $query);
     $row = mysqli_fetch_assoc($result);
@@ -27,7 +25,13 @@
                         <li><a class="black-text" href="profile.php?kd_user=<?=$row['kd_user']?>"><i class="material-icons">person_outline</i>Profile</a></li>
                         <li><a class="black-text" href="settings.php?kd_user=<?=$row['kd_user']?>"><i class="material-icons">settings</i>Setting</a></li>
                         <li class="divider" tabindex="-1"></li>
-                        <li><a class="black-text" href="#!"><i class="material-icons">exit_to_app</i>Logout</a></li>
+                        <li>
+                            <form action="actions/logout.php">
+                                <button style="border:none; background: transparent; width:100%;" class="black-text" type="submit">
+                                    <i class="material-icons">exit_to_app</i>Logout
+                                </button>
+                            </form>
+                        </li>
                     </ul>
                 </ul>
             </div>

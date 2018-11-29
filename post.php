@@ -64,7 +64,7 @@
                                             </div>
                                             <div class="divider" style="margin-bottom:10px"></div>
                                             <?php if ($row['photo'] != NULL) { ?>
-                                                <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img">
+                                                <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img materialboxed">
                                             <?php } ?>
                                             <p>
                                                 <?= $row['body'] ?>

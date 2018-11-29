@@ -1,4 +1,11 @@
-<?php include 'helper/connection.php'; ?>
+<?php 
+    include 'helper/connection.php'; 
+    session_start();
+
+    if (!isset($_SESSION['user'])) {
+        header('Location: index.php');
+    }
+?>
 
 <!DOCTYPE html>
 <html>
@@ -80,7 +87,7 @@
                                             </div>
                                             <div class="divider" style="margin-bottom:10px"></div>
                                             <?php if ($row['photo'] != NULL) { ?>
-                                                <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img">
+                                                <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img materialboxed">
                                             <?php } ?>
                                             <p>
                                                 <?= $row['body'] ?>
