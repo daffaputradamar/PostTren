@@ -7,6 +7,8 @@
         header('Location: index.php');
     }
 
+    $user_id = $_SESSION['user'];
+
     $kd_post = $_GET['kd_post'];
 
     if (isset($_GET['error'])) {
@@ -20,7 +22,7 @@
 
     <body>
         <?php include 'layouts/navbar.php'; ?>
-        <div style="margin-top:12px"></div>
+        <div class="mt-12"></div>
         <div class="container">
             <div class="row">
                 <div class="col s8 offset-s2">
@@ -41,34 +43,37 @@
                                         ORDER BY created_at DESC";
                                     $result = mysqli_query($con, $query);
                                     while ($row = mysqli_fetch_assoc($result)) {
+                                        $post = $row['kd_post'];
                                 ?>
                                     <div class="row">
                                         <div class="col s2">
-                                            <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="60">
+                                            <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="60" height="60">
                                         </div>
                                         <div class="col s10">
-                                            <div style="display:flex; align-items: center; justify-content: space-between">
+                                            <div class="flex flex--centered--vertical flex--space-between--horizontal">
                                                 <div>
                                                     <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
                                                     <p><?=$row['username']?></p>
                                                 </div>
-                                                <div style="display:flex; align-items: center;">
-                                                    <form action="actions/update_post.php" method="post" style="margin-right: 10px">
-                                                        <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
-                                                        <input type="hidden" name="kd_user" value="<?=$row['kd_user']?>">
-                                                        <button type="submit" class="submit-button" style="padding: 2px; margin:0;border-radius: 10px">
-                                                            <i class="material-icons">edit</i> 
-                                                        </button>
-                                                    </form>
+                                                <div class="flex flex--centered--vertical">
+                                                    <?php if ($user_id === $row['kd_user']) { ?>
+                                                        <form action="actions/update_post.php" method="post" class="mr-12">
+                                                            <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
+                                                            <input type="hidden" name="kd_user" value="<?=$row['kd_user']?>">
+                                                            <button type="submit" class="btn btn-small orange button--primary--outline button--rounded button--primary--outline--thin">
+                                                                <i class="material-icons">edit</i> 
+                                                            </button>
+                                                        </form>
+                                                    <?php } ?>
                                                     <form action="actions/report_post.php" method="post">
                                                         <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
-                                                        <button type="submit" class="report-button" style="padding: 5px 4px 2px 4px; margin:0;border-radius: 10px">
+                                                        <button type="submit" class="btn grey btn-small button--danger--outline button--danger--outline--thin button--rounded">
                                                             <i class="tiny material-icons">report</i> 
                                                         </button>
                                                     </form>
                                                 </div>
                                             </div>
-                                            <div class="divider" style="margin-bottom:10px"></div>
+                                            <div class="divider" style="mb-12"></div>
                                             <?php if ($row['photo'] != NULL) { ?>
                                                 <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img materialboxed">
                                             <?php } ?>
@@ -76,23 +81,50 @@
                                             <p>
                                                 <?= $row['body'] ?>
                                             </p>
-                                            <div class="row">
-                                                <div class="col s3">
+                                            <div class="mt-12">
+                                                <div class="left">
+                                                    <?php
+                                                        $query = "SELECT COUNT(kd_user) as like_sum FROM likes
+                                                        WHERE kd_post = $post";
+                                                        $res = mysqli_query($con, $query);
+                                                        $hasil_hitung = mysqli_fetch_array($res);
+                                                        if ($hasil_hitung) {
+                                                            echo "<small class='size--small mr-12'>$hasil_hitung[0] likes</small>";
+                                                        } else {
+                                                            echo "<small class='size--small mr-12'> 0 like like</small>";
+                                                        }
+                                                    ?>
+                                                    <?php
+                                                        $query = "SELECT COUNT(kd_comment) as comment_sum FROM comments
+                                                        WHERE kd_post = $post";
+                                                        $res = mysqli_query($con, $query);
+                                                        $hasil_hitung = mysqli_fetch_array($res);
+                                                        if ($hasil_hitung) {
+                                                            echo "<small class='size--small mr-12'>$hasil_hitung[0] comments</small>";
+                                                        } else {
+                                                            echo "<small class='size--small mr-12'> 0 like comment</small>";
+                                                        }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div class="divider"></div>
+                                            <div class="flex">
+                                                <div class="mr-12">
                                                     <?php 
-                                                        $user_id = $_SESSION['user'];
-                                                        $query = "SELECT * FROM likes WHERE kd_post = $kd_post AND kd_user = $user_id LIMIT 1";
-                                                        $result = mysqli_query($con, $query);
-                                                        if (mysqli_fetch_assoc($result)) {
+                                                        $query = "SELECT * FROM likes WHERE kd_post = $post AND kd_user = $user_id LIMIT 1";
+                                                        $res = mysqli_query($con, $query);
+                                                        if (mysqli_fetch_assoc($res)) {
                                                     ?>
                                                         <form action="actions/add_like.php" method="post">
-                                                            <input type="hidden" name="kd_post" value=<?=$kd_post?>>
-                                                            <button class="submit-button love-button love-button-active" type="submit" name="submit-like" id="fav-btn" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span>
+                                                            <input type="hidden" name="kd_post" value=<?=$post?>>
+                                                            <button class="btn button--rounded mt-12 button--love--active" type="submit" name="submit-like"><i class="material-icons">favorite</i>
                                                             </button>
                                                         </form>
                                                     <?php } else { ?>
                                                         <form action="actions/add_like.php" method="post">
-                                                            <input type="hidden" name="kd_post" value=<?=$kd_post?>>
-                                                            <button class="submit-button love-button" type="submit" name="submit-like" id="fav-btn" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span>
+                                                            <input type="hidden" name="kd_post" value=<?=$post?>>
+                                                            <button class="btn grey lighten-1 button--rounded mt-12" type="submit" name="submit-like"><i class="material-icons">favorite</i>
                                                             </button>
                                                         </form>
                                                     <?php } ?>
@@ -101,9 +133,9 @@
                                         </div>
                                     </div>
                                 <?php } ?>
-                                <div class="divider" style="margin: 15px 0"></div>
+                                <div class="divider mt-12 mb-12"></div>
                                 <div class="container">
-                                    <div style="margin-bottom: 40px">
+                                    <div class="mb-30">
                                         <form action="actions/add_comment.php" method="post">
                                             <input type="hidden" name="kd_post" value="<?=$kd_post?>">
                                             <div class="input-field col s12">
@@ -111,7 +143,7 @@
                                                 <label for="tweet_textarea">Type your Comment</label>
                                             </div>
                                             <div class="right-align">
-                                                <button class="submit-button" type="submit" name="submit-comment" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Post Comment</span></button>
+                                                <button class="btn orange button--primary--outline button--rounded flex flex--centered--vertical" type="submit" name="submit-comment""><i class="material-icons">comment</i><span class="ml-5">Post Comment</span></button>
                                             </div>
                                         </form>
                                     </div>
@@ -126,18 +158,18 @@
                                     ?>
                                         <div class="row">
                                             <div class="col s2 center-align">
-                                                <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="40">
+                                                <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="40" height="40">
                                             </div>
                                             <div class="col s10">
-                                                <div style="display:flex; align-items: center; justify-content: space-between">
+                                                <div class="flex flex--centered--vertical flex--space-between--horizontal">
                                                     <div>
                                                         <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
                                                     <p><?=$row['username']?></p>
                                                     </div>
-                                                    <div style="display:flex; align-items: center;">
+                                                    <div class="flex flex--centered--vertical">
                                                         <form action="actions/report_comment.php" method="post">
                                                             <input type="hidden" name="kd_comment" value="<?=$row['kd_comment']?>">
-                                                            <button type="submit" class="report-button" style="padding: 5px 4px 2px 4px; margin:0;border-radius: 10px">
+                                                            <button type="submit" class="btn grey btn-small button--danger--outline button--danger--outline--thin button--rounded">
                                                                 <i class="tiny material-icons">report</i> 
                                                             </button>
                                                         </form>

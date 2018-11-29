@@ -40,7 +40,7 @@ if (isset($_POST['submit-post'])) {
         
         if(move_uploaded_file($tmp, $path)) {
             $query = "INSERT INTO posts (body, photo, created_at, kd_user) 
-            VALUES ('$body', '$nama_baru', CURRENT_TIMESTAMP() , 1)";
+            VALUES ('$body', '$nama_baru', CURRENT_TIMESTAMP() , $kd_user)";
             if (mysqli_query($con, $query)) {
                 header("Location:../home.php");
             } else {

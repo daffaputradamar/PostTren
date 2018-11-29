@@ -3,6 +3,26 @@ body {
   /* overflow: hidden; */
 }
 
+.body--overflow-hidden {
+  overflow: hidden;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex--centered--vertical {
+  align-items: center;
+}
+
+.flex--centered--horizontal {
+  justify-content: center;
+}
+
+.flex--space-between--horizontal {
+  justify-content: space-between;
+}
+
 .container {
   margin: 0 auto !important;
   max-width: 1280px !important;
@@ -28,32 +48,6 @@ blockquote {
   border-right: 3px solid #fb8c00;
 }
 
-.full-height {
-  height: 100vh;
-}
-
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.flex-v-center {
-  display: flex;
-  align-items: center;
-}
-
-h5 span {
-  padding-left: 15px;
-}
-
-.logo i {
-  background-color: #fb8c00;
-  color: white;
-  padding: 5px 8px;
-  border-radius: 6px;
-}
-
 .input-field input:focus + label,
 .materialize-textarea:focus:not([readonly]) + label {
   color: #fb8c00 !important;
@@ -65,81 +59,136 @@ h5 span {
   box-shadow: 0 1px 0 0 #fb8c00 !important;
 }
 
-.submit-button {
-  display: flex;
-  align-items: center;
+.size--small {
+  font-size: 0.9rem;
+}
+
+.h-100 {
+  height: 100vh;
+}
+
+.mt-12 {
+  margin-top: 12px;
+}
+
+.mt-20 {
   margin-top: 20px;
-  padding: 10px 18px;
-  color: #fb8c00;
-  border: #fb8c00 solid 2px;
-  background-color: white;
-  transition: 0.2s;
-  cursor: pointer;
 }
 
-.submit-button:hover {
-  color: white;
-  background-color: #fb8c00;
-  transition: 0.2s;
-}
-
-.love-button {
-  color: #ec407a !important;
-  border: #ec407a solid 2px !important;
-}
-
-.love-button:hover {
-  background-color: #ec407a !important;
-  color: white !important;
-}
-
-.love-button:focus {
-  background-color: #ec407a !important;
-  color: white !important;
-}
-
-.love-button-active {
-  background-color: #ec407a !important;
-  color: white !important;
-}
-
-.report-button {
-  margin-top: 20px;
-  padding: 10px 18px;
-  color: #f44336;
-  border: #f44336 solid 2px;
-  background-color: white;
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-.report-button:hover {
-  color: white;
-  background-color: #f44336;
-  transition: 0.2s;
-}
-
-.edit-button {
-  border: none !important;
-  /* background-color: white !important; */
-}
-
-.form-login {
+.mt-30 {
   margin-top: 30px;
 }
 
-.form-register {
-  margin-top: 10px;
+.mb-12 {
+  margin-bottom: 12px;
 }
 
-.form-register .container {
+.mb-30 {
+  margin-bottom: 30px;
+}
+
+.ml-5 {
+  margin-left: 5px;
+}
+
+.ml-20 {
+  margin-left: 20px;
+}
+
+.mr-12 {
+  margin-right: 12px;
+}
+
+.mr-20 {
+  margin-right: 20px;
+}
+
+.pt-12 {
+  padding-top: 12px;
+}
+
+.pl-12 {
+  padding-left: 12px;
+}
+
+.pr-12 {
+  padding-right: 12px;
+}
+
+.button--rounded {
+  border-radius: 5px;
+}
+
+.button__a--no-background:hover {
+  background-color: white !important;
+}
+
+.button__a--no-pointer {
+  cursor: default !important;
+}
+
+.button-logout {
+  cursor: pointer;
+  border:none; 
+  background: transparent; 
+  width:100%;
+}
+
+.button--primary--outline {
+  background-color: white !important;
+  color: #fb8c00;
+  border: #fb8c00 solid 2px;
+}
+
+.button--primary--outline:hover {
+  background-color: #fb8c00 !important;
+  color: white;
+}
+
+.button--primary--outline--thin {
+  border: #fb8c00 solid 1px;
+}
+
+.button--danger--outline {
+  background-color: white !important;
+  color: #f44336;
+  border: #f44336 solid 2px;
+}
+
+.button--danger--outline:hover {
+  background-color: #f44336 !important;
+  color: white
+}
+
+.button--danger--outline--thin {
+  border: #f44336 solid 1px;
+}
+
+.button--secondary--outline {
+  background-color: white !important;
+  color: #bdbdbd;
+  border: #bdbdbd solid 2px;
+}
+
+.button--secondary--outline:hover {
+  background-color: #bdbdbd !important;
+  color: white
+}
+
+.button--secondary--outline--thin {
+  border: #bdbdbd solid 1px;
+}
+
+.button--love--active {
+  background-color: #f44336 !important;
+  color: white;
+}
+
+.register__container {
   margin-top: 20px;
+  padding: 0 20px;
 }
 
-.navLogo {
-  font-size: 1.5rem !important;
-}
-
-.logout-li button {
-  cursor: pointer !important;
+.clearfix {
+  clear: both;
 }

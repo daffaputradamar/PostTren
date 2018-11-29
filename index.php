@@ -9,29 +9,38 @@
 <html>
     <?php include 'layouts/header.php'; ?>
 
-    <body style="overflow:hidden">
+    <body class="body--overflow-hidden">
         <div class="row">
-            <div class="col s6 orange darken-1 full-height valign-wrapper">
+            <div class="col s6 orange darken-1 h-100 valign-wrapper">
                 <div class="container white-text">
                     <div class="row">
                         <div class="col s12 offset-s2">
-                            <h5 class="flex-v-center"><i class="small material-icons">search
-</i> <span>Follow your hobby</span> </h5>
+                            <h5 class="flex flex--centered--vertical">
+                                <i class="small material-icons pr-12">search
+                                </i> 
+                                <span>Follow your hobby</span> 
+                            </h5>
                         </div>
                         <div class="col s12 offset-s2">
-                            <h5 class="flex-v-center"><i class="small material-icons">people_outline
-    </i> <span>Interact with other peoples</span> </h5>
+                            <h5 class="flex flex--centered--vertical">
+                                <i class="small material-icons pr-12">people_outline
+                                    </i> 
+                                    <span>Interact with other peoples</span> 
+                            </h5>
                         </div>
                         <div class="col s12 offset-s2">
-                            <h5 class="flex-v-center"><i class="small material-icons">chat_bubble_outline
-    </i> <span>Join many conversations</span> </h5>
+                            <h5 class="flex flex--centered--vertical">
+                                <i class="small material-icons pr-12">chat_bubble_outline
+                                    </i> 
+                                    <span>Join many conversations</span> 
+                            </h5>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col s6 full-height">
+            <div class="col s6 h-100">
                 <div class="center-align">
-                    <div class="form-login">
+                    <div class="mt-30">
                         <?php if ($_GET['error']) { ?>
                                 <div class="card">
                                     <div class="card-content">
@@ -53,19 +62,18 @@
                                         <label for="password">Password</label>
                                     </div>
                                 </div>
-                                <div class="col s3">
-                                    <button class="submit-button" type="submit" name="login">Log in
+                                <div class="col s3 mt-12">
+                                    <button class="btn waves-effect waves-light orange button--primary--outline button--rounded" type="submit" name="login">Log in
                                     </button>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="divider"></div>
-                    <div class="form-register">
-                        <!-- <?php include 'layouts/logo.php'; ?> -->
+                    <div class="mt-12 register">
                         <h4>See what's new today</h4>
                         <h5>Join us now.</h5>
-                        <div class="container">
+                        <div class="register__container">
                             <div class="row">
                                 <form class="col s12" method="post" action="actions/add_user.php">
                                 <div class="row">
@@ -90,7 +98,7 @@
                                     <label for="password_reg">Password</label>
                                     </div>
                                 </div>
-                                <button class="btn-large orange darken-1 waves-effect waves-light" type="submit" name="register">Register
+                                <button class="btn-large orange darken-1 waves-effect waves-light button--rounded" type="submit" name="register">Register
                                         <i class="material-icons right">send</i>
                                 </button>
                                 </form>
