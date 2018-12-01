@@ -22,19 +22,19 @@ if (isset($_POST['submit-post'])) {
         $nama_baru = $date . "_" . $nama_file;
         $path = $destination_path . "/../$nama_folder/$nama_baru";
         if (file_exists($path)) {
-            $error = urldecode("File dengan nama yang sama sudah tersimpan, coba lagi");
+            $error = urldecode("File with the same name is already exist");
             header("Location:../home.php?error=$error");
         }
 
         $ukuran = $_FILES['file']['size'];
         if ($ukuran > 2000000) {
-            $error = urldecode("Ukuran melebihi 2 MB");
+            $error = urldecode("Size exceeds maximum file size 2MB");
             header("Location:../home.php?error=$error");
         }
 
         $tipe_file = array('image/jpeg', 'image/gif', 'image/png');
         if (!in_array($_FILES['post-photo']['type'], $tipe_file)) {
-            $error = urldecode("Cek Kembali Ekstensi File Anda (*jpeg, *jpg, *gif, *png)");
+            $error = urldecode("Check your uploaded file extension (*jpeg, *jpg, *gif, *png)");
             header("Location:../home.php?error=$error");
         }
         
@@ -44,11 +44,11 @@ if (isset($_POST['submit-post'])) {
             if (mysqli_query($con, $query)) {
                 header("Location:../home.php");
             } else {
-                $error = urldecode("Data tidak berhasil ditambahakan");
+                $error = urldecode("Data can't be added");
                 header("Location:../home.php?error=$error");
             }
         } else {
-            $error = urldecode("Data tidak berhasil ditambahakan");
+            $error = urldecode("Data can't be added");
             header("Location:../home.php?error=$error");
         }
     } else {
@@ -59,7 +59,7 @@ if (isset($_POST['submit-post'])) {
         if (mysqli_query($con, $query)) {
             header("Location:../home.php");
         } else {
-            $error = urldecode("Data tidak berhasil ditambahakan");
+            $error = urldecode("Data is failed to be added");
             header("Location:../home.php?error=$error");
         }
     }

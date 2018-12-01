@@ -17,7 +17,7 @@ if (isset($_POST['register'])) {
         $_SESSION['user'] = $id;
         header('Location: ../home.php');
     } else {
-        $error = urldecode("Terjadi kesalahan saat registrasi");
+        $error = urldecode("There is something wrong with the regitration");
         header("Location: ../index.php?error=$error");
     }
     mysqli_close($con);

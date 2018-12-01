@@ -9,7 +9,7 @@ include '../helper/connection.php';
 
 if (isset($_POST['submit-comment'])) {
     if (empty($_POST['body-comment'])) {
-        $error = urldecode("Komentar tidak berhasil ditambahakan");
+        $error = urldecode("Comment can't be added");
         header("Location:../post.php?kd_post=$kd_post&error=$error");
     }
     
@@ -24,7 +24,7 @@ if (isset($_POST['submit-comment'])) {
     if (mysqli_query($con, $query)) {
         header("Location:../post.php?kd_post=$kd_post");
     } else {
-        $error = urldecode("Komentar tidak berhasil ditambahakan");
+        $error = urldecode("Comment can't be added");
         header("Location:../post.php?kd_post=$kd_post&error=$error");
     }
     

@@ -16,13 +16,13 @@ if (isset($_POST['login'])) {
             $_SESSION["user"] = mysqli_fetch_assoc($result)['kd_user'];
             header('Location: ../home.php');
         } else {
-            $error = urldecode("Username atau password salah");
+            $error = urldecode("Username or password is wrong");
             header("Location: ../index.php?error=$error");
         }
     
         mysqli_close($con);
     } else {
-        $error = urldecode("Username atau password kosong");
+        $error = urldecode("Username or password is empty");
         header("Location: index.php?error=$error");
     }
 }

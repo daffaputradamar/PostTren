@@ -9,9 +9,9 @@
 <html>
     <?php include 'layouts/header.php'; ?>
 
-    <body class="body--overflow-hidden">
-        <div class="row">
-            <div class="col s6 orange darken-1 h-100 valign-wrapper">
+    <body class="h-100">
+        <div class="row mb-0">
+            <div class="col s6 orange darken-1 valign-wrapper h-100" style="height: 120vh">
                 <div class="container white-text">
                     <div class="row">
                         <div class="col s12 offset-s2">
@@ -98,7 +98,7 @@
                                     <label for="password_reg">Password</label>
                                     </div>
                                 </div>
-                                <button class="btn-large orange darken-1 waves-effect waves-light button--rounded" type="submit" name="register">Register
+                                <button class="btn btn-large orange darken-1 waves-effect waves-light button--rounded" type="submit" name="register">Register
                                         <i class="material-icons right">send</i>
                                 </button>
                                 </form>

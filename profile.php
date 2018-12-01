@@ -19,7 +19,7 @@
         <div style="margin-top:12px"></div>
         <div class="container">
             <div class="row">
-                <div class="col s3">
+                <div class="col s4">
                     <div class="card">
                         <div class="card-content">
                             <div class="row">
@@ -27,6 +27,7 @@
                                     $query = "SELECT * from users WHERE kd_user = $kd_user_profile";
                                     $result = mysqli_query($con, $query);
                                     $row = mysqli_fetch_assoc($result);
+                                    $poster = $row['kd_user'];
                                 ?>
                                 <div class="col s3">
                                     <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="70" height="70">
@@ -47,11 +48,11 @@
                                         <h6>Posts</h6>
                                         <?php 
                                             $query = "SELECT COUNT(kd_post) as post_sum FROM posts
-                                                WHERE kd_user = $kd_user_profile";
+                                                WHERE kd_user = $kd_user_profile AND deleted_at IS NULL";
                                             $result = mysqli_query($con, $query);
-                                            $row = mysqli_fetch_array($result);
-                                            if ($row) {
-                                                echo "$row[0]";
+                                            $post_sum = mysqli_fetch_array($result);
+                                            if ($post_sum) {
+                                                echo "$post_sum[0]";
                                             } else {
                                                 echo '0';
                                             }
@@ -65,10 +66,30 @@
                                     </blockquote>
                                 </div>
                             </div>
+                            <div class="flex flex--centered--horizontal">
+                                <?php
+                                    if ($user_id !== $poster) {
+                                    $query = "SELECT * FROM followers WHERE kd_user_followed = $poster AND kd_user_following = $user_id LIMIT 1";
+                                    $res = mysqli_query($con, $query);
+                                    if (mysqli_fetch_assoc($res)) {
+                                ?>
+                                    <form action="actions/add_follower.php" method="post">
+                                        <input type="hidden" name="kd_user" value=<?=$poster?>>
+                                        <button class="btn btn-small mt-12 orange" type="submit" name="submit-like">following
+                                        </button>
+                                    </form>
+                                <?php } else { ?>
+                                    <form action="actions/add_follower.php" method="post">
+                                        <input type="hidden" name="kd_user" value=<?=$poster?>>
+                                        <button class="btn btn-small button--rounded mt-12 button--primary--outline" type="submit" name="submit-like">follow
+                                        </button>
+                                    </form>
+                                <?php } } ?>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col s6">
+                <div class="col s8">
                     <?php if($user_id === $kd_user_profile) { ?>
                     <div class="card">
                         <div class="card-content">
@@ -84,7 +105,7 @@
                                     </div>
                                     </div>
                                     <div class="input-field col s12">
-                                    <textarea id="tweet_textarea" name="body" class="materialize-textarea"></textarea>
+                                    <textarea id="tweet_textarea" name="body" class="materialize-textarea" required></textarea>
                                     <label for="tweet_textarea">What's new today</label>
                                     <button class="btn right mt-12 orange" name="submit-post">Post</button>
                                 </form>
@@ -97,11 +118,12 @@
                             <?php 
                                 $query = "SELECT * FROM posts p 
                                     INNER JOIN users u ON p.kd_user = u.kd_user
-                                    WHERE p.kd_user = $kd_user_profile
+                                    WHERE p.kd_user = $kd_user_profile AND p.deleted_at IS NULL
                                     ORDER BY created_at DESC";
                                 $result = mysqli_query($con, $query);
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     $post = $row['kd_post'];
+                                    $poster = $row['kd_user'];
                             ?>
                             <div class="card">
                                 <div class="card-content">
@@ -111,53 +133,73 @@
                                         </div>
                                         <div class="col s10">
                                         <div class="flex flex--centered--vertical flex--space-between--horizontal">    
-                                            <a class="black-text" href="profile.php?kd_user=<?=$row['kd_user']?>">
-                                            <div>
-                                                <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
-                                                <p><?=$row['username']?></p>
-                                            </div>
+                                            <a class="black-text mr-20" href="profile.php?kd_user=<?=$poster?>">
+                                                <div>
+                                                    <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
+                                                    <p><?=$row['username']?></p>
+                                                </div>
                                             </a>
                                             <div class="flex flex--centered--vertical">
-                                                    <?php if ($user_id === $row['kd_user']) { ?>
-                                                        <form action="actions/update_post.php" method="post" class="mr-12">
-                                                            <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
-                                                            <input type="hidden" name="kd_user" value="<?=$row['kd_user']?>">
-                                                            <button type="submit" class="btn btn-small orange button--primary--outline button--rounded button--primary--outline--thin">
-                                                                <i class="material-icons">edit</i> 
-                                                            </button>
-                                                        </form>
-                                                    <?php } ?>
-                                                    <form action="actions/report_post.php" method="post">
-                                                        <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
-                                                        <button type="submit" class="btn grey btn-small button--danger--outline button--danger--outline--thin button--rounded">
-                                                            <i class="tiny material-icons">report</i> 
-                                                        </button>
-                                                    </form>
-                                                </div>
+                                                <?php if ($user_id === $poster) { ?>
+                                                    <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-me'><i class="material-icons">more_vert</i></a>
+                                                        <ul id='more-menu-me' class='dropdown-content'>
+                                                            <li class="center-align">
+                                                                <a href="edit_post.php?kd_post=<?=$post?>" class="amber-text">
+                                                                <i class="material-icons">edit</i> Edit
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="#modal-delete" class="red-text modal-trigger">
+                                                                <i class="material-icons">delete</i> Delete
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <div id="modal-delete" class="modal h-120">
+                                                            <div class="modal-content">
+                                                                <form action="actions/delete_post.php" method="post">
+                                                                    <h6>Are you sure you want to delete this post?</h6>
+                                                                    <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
+                                                                    <input type="hidden" name="kd_user" value="<?=$poster?>">
+                                                                    <button type="submit" class="btn red button--danger--outline button--danger--outline--thin right" name="delete-post">
+                                                                        Delete
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                <?php } ?>
+                                                <?php if ($user_id !== $poster) { ?>
+                                                <form action="actions/report_post.php" method="post">
+                                                    <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
+                                                    <button type="submit" class="btn grey btn-small button--danger--outline button--danger--outline--thin button--rounded">
+                                                        <i class="tiny material-icons">report</i> 
+                                                    </button>
+                                                </form>
+                                                <?php } ?>
                                             </div>
-                                            <div class="divider" style="mb-12"></div>
-                                            <?php if ($row['photo'] != NULL) { ?>
-                                                <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img materialboxed">
-                                            <?php } ?>
-                                            <br>
-                                            <p>
-                                                <?= $row['body'] ?>
-                                            </p>
-                                            <div class="mt-12">
-                                                <div class="left">
-                                                    <?php
-                                                        $query = "SELECT COUNT(kd_user) as like_sum FROM likes
-                                                        WHERE kd_post = $post";
-                                                        $res = mysqli_query($con, $query);
-                                                        $hasil_hitung = mysqli_fetch_array($res);
-                                                        if ($hasil_hitung) {
-                                                            echo "<small class='size--small mr-12'>$hasil_hitung[0] likes</small>";
-                                                        } else {
-                                                            echo "<small class='size--small mr-12'> 0 like like</small>";
-                                                        }
-                                                    ?>
-                                                    <?php
-                                                        $query = "SELECT COUNT(kd_comment) as comment_sum FROM comments
+                                        </div>
+                                        <div class="divider mb-12"></div>
+                                        <?php if ($row['photo'] != NULL) { ?>
+                                            <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img materialboxed">
+                                        <?php } ?>
+                                        <br>
+                                        <p>
+                                            <?= $row['body'] ?>
+                                        </p>
+                                        <div class="mt-12">
+                                            <div class="left">
+                                                <?php
+                                                    $query = "SELECT COUNT(kd_user) as like_sum FROM likes
+                                                    WHERE kd_post = $post";
+                                                    $res = mysqli_query($con, $query);
+                                                    $hasil_hitung = mysqli_fetch_array($res);
+                                                    if ($hasil_hitung) {
+                                                        echo "<small class='size--small mr-12'>$hasil_hitung[0] likes</small>";
+                                                    } else {
+                                                        echo "<small class='size--small mr-12'> 0 like like</small>";
+                                                    }
+                                                ?>
+                                                <?php
+                                                    $query = "SELECT COUNT(kd_comment) as comment_sum FROM comments
                                                         WHERE kd_post = $post";
                                                         $res = mysqli_query($con, $query);
                                                         $hasil_hitung = mysqli_fetch_array($res);
@@ -206,31 +248,6 @@
                         <?php 
                             }
                         ?>    
-                    </div>
-                </div>
-                <div class="col s3">
-                    <div class="card">
-                        <div class="card-content">
-                            <div>
-                                <h6 class="mb-30">Discover new people</h6>
-                                <?php
-                                    $query = "SELECT * FROM users WHERE kd_user != $user_id ORDER BY RAND() LIMIT 3";
-                                    $result = mysqli_query($con, $query);
-                                    while($row = mysqli_fetch_assoc($result)) {
-                                ?>
-                                    <div class="row mt-12">
-                                        <div class="col s3 mt-12">
-                                            <img src="assets/photo_profil/<?= $row['photo_profil'] ?>" class="circle" alt="photo profile" width="35" height="35">
-                                        </div>
-                                        <div class="col s6">
-                                            <p><?=$row['username']?></p>
-                                            <button class="btn btn-small orange button--primary--outline button--rounded mt-12">Follow</button>
-                                        </div>
-                                    </div>
-                                    <div class="divider"></div>
-                                <?php } ?>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

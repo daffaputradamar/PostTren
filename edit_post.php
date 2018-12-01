@@ -7,7 +7,17 @@
         header('Location: index.php');
     }
 
+    $user_id = $_SESSION['user'];
+
     $kd_post = $_GET['kd_post'];
+
+    $query = "SELECT kd_user from posts WHERE kd_post = $kd_post";
+    $result = mysqli_query($con, $query);
+    $row = mysqli_fetch_assoc($result);
+
+    if ($row['kd_user'] !== $user_id) {
+        header('Location: home.php');
+    }
 
     if (isset($_GET['error'])) {
         $pesan = $_GET['error'];
@@ -20,7 +30,7 @@
 
     <body>
         <?php include 'layouts/navbar.php'; ?>
-        <div style="margin-top:12px"></div>
+        <div class="mt-12"></div>
         <div class="container">
             <div class="row">
                 <div class="col s8 offset-s2">
@@ -41,116 +51,49 @@
                                         ORDER BY created_at DESC";
                                     $result = mysqli_query($con, $query);
                                     while ($row = mysqli_fetch_assoc($result)) {
+                                        $post = $row['kd_post'];
                                 ?>
                                     <div class="row">
                                         <div class="col s2">
-                                            <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="60">
+                                            <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="60" height="60">
                                         </div>
                                         <div class="col s10">
-                                            <div style="display:flex; align-items: center; justify-content: space-between">
+                                            <div class="flex flex--centered--vertical flex--space-between--horizontal">
                                                 <div>
                                                     <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
                                                     <p><?=$row['username']?></p>
                                                 </div>
-                                                <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
-                                                <ul id='option-dropdown' class='dropdown-content'>
-                                                    <li><a class="red-text center" href="#!">Report</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="divider" style="margin-bottom:10px"></div>
-                                            <?php if ($row['photo'] != NULL) { ?>
-                                                <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img">
-                                            <?php } ?>
-                                            <p>
-                                                <?= $row['body'] ?>
-                                            </p>
-                                            <div class="row">
-                                                <div class="col s3">
-                                                    <?php 
-                                                        $query = "SELECT * FROM likes WHERE kd_post = $kd_post AND kd_user = 1 LIMIT 1";
-                                                        $result = mysqli_query($con, $query);
-                                                        if (mysqli_fetch_assoc($result)) {
-                                                    ?>
-                                                        <form action="actions/add_like.php" method="post">
-                                                            <input type="hidden" name="kd_post" value=<?=$kd_post?>>
-                                                            <button class="submit-button love-button love-button-active" type="submit" name="submit-like" id="fav-btn" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span>
-                                                            </button>
-                                                        </form>
-                                                    <?php } else { ?>
-                                                        <form action="actions/add_like.php" method="post">
-                                                            <input type="hidden" name="kd_post" value=<?=$kd_post?>>
-                                                            <button class="submit-button love-button" type="submit" name="submit-like" id="fav-btn" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">favorite</i><span style="padding-left: 5px">Like</span>
-                                                            </button>
-                                                        </form>
-                                                    <?php } ?>
+                                                <div class="flex flex--centered--vertical">
+                                                    <!-- Kosong.. -->
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                                <div class="divider" style="margin: 15px 0"></div>
-                                <div class="container">
-                                    <div style="margin-bottom: 40px">
-                                        <form action="actions/add_comment.php" method="post">
-                                            <input type="hidden" name="kd_post" value="<?=$kd_post?>">
-                                            <div class="input-field col s12">
-                                                <textarea id="tweet_textarea" class="materialize-textarea" name="body-comment"></textarea>
-                                                <label for="tweet_textarea">Type your Comment</label>
-                                            </div>
-                                            <div class="right-align">
-                                                <button class="submit-button" type="submit" name="submit-comment" style="border-radius: 5px; margin-top:13px; padding: 4px 8px;"><i class="material-icons">comment</i><span style="padding-left: 5px">Post Comment</span></button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <?php 
-                                    $query = "SELECT * FROM comments c 
-                                        INNER JOIN posts p ON c.kd_post = p.kd_post
-                                        INNER JOIN users u ON p.kd_user = u.kd_user
-                                        WHERE c.kd_post = $kd_post
-                                        ORDER BY c.created_at DESC";
-                                    $result = mysqli_query($con, $query);
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                    ?>
-                                        <div class="row">
-                                            <div class="col s2 center-align">
-                                                <img src="assets/photo_profil/<?=$row['photo_profil']?>" class="circle" alt="photo profile" width="40">
-                                            </div>
-                                            <div class="col s10">
-                                                <div style="display:flex; align-items: center; justify-content: space-between">
-                                                    <div>
-                                                        <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
-                                                    <p><?=$row['username']?></p>
-                                                    </div>
-                                                    <a href="#" class="dropdown-trigger grey-text" data-target="option-dropdown"><i class="material-icons">more_vert</i></a>
-                                                    <ul id='option-dropdown' class='dropdown-content'>
-                                                        <li><a class="red-text center" href="#!">Report</a></li>
-                                                    </ul>
+                                            <div class="divider mb-12"></div>
+                                            <form action="actions/update_post.php" method="post">
+                                                <?php if ($row['photo'] != NULL) { ?>
+                                                    <img src="assets/posts/<?=$row['photo']?>" alt="" class="responsive-img materialboxed">
+                                                <?php } ?>
+                                                <br>
+                                                <div class="input-field">
+                                                    <input type="hidden" name="post-user" value="<?= $row['kd_user'] ?>" >
+                                                    <input type="hidden" name="post-id" value="<?= $post ?>">
+                                                    <input id="body-post" name="post-body" type="text" class="validate" value="<?=$row['body']?>" required>
+                                                    <label for="body-post">Post Description</label>
+                                                    <button class="btn orange darken-1 waves-effect waves-light right" type="submit" name="update_post">Update</button>
+                                                    <div class="clearfix"></div>
                                                 </div>
-                                                <div class="divider" style="margin: 5px 0"></div>
-                                                <p><?=$row['body_comment']?></p>
-                                            </div>
-                                        </div>
-                                    <?php
-                                        }
-                                        mysqli_close($con);
-                                    ?>
-                                    <div class="row">
-                                        <div class="col s2 center-align">
-                                            <img src="assets/photo_profil/default-profile.png" class="circle" alt="photo profile" width="40">
-                                        </div>
-                                        <div class="col s10">
-                                            <h6>Username</h6>
-                                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci accusamus cupiditate magni fuga quidem porro neque facilis cum quae dignissimos!</p>
+                                            </form>
                                         </div>
                                     </div>
-                                </div>
+                                <?php 
+                                    } 
+                                    mysqli_close($con);
+                                ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script src="js/like.js"></script>
         <?php include 'layouts/scripts.php'; ?>
     </body>
 </html>

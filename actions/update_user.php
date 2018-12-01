@@ -18,7 +18,7 @@ if(isset($_POST['update_profile'])) {
     if (mysqli_query($con, $query)) {
         header("Location:../settings.php");        
     } else {
-        $error = urldecode("Data tidak berhasil diupdate");
+        $error = urldecode("Data is failed to be updated");
         header("Location:../settings.php?error=$error");
     }
 }
