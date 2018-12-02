@@ -15,10 +15,7 @@ if(isset($_POST['unreport-post'])) {
     $query = "UPDATE posts SET is_reported = 0 WHERE kd_post = $kd_post";
 
     if (mysqli_query($con, $query)) {
-        header("Location:../dashboard.php");
-    } else {
-        $error = urldecode("Post is failed to be reported");
-        header("Location: ../dashboard.php?error=$error");
+        header("Location:../dashboard.php?tab=post");
     }
 
     mysqli_close($con);

@@ -14,10 +14,7 @@ if (isset($_POST['remove-post'])) {
 
     $query = "UPDATE posts SET deleted_at = CURRENT_TIMESTAMP() WHERE kd_post = $post_id";
     if (mysqli_query($con, $query)) {
-        header("Location: ../dashboard.php");
-    } else {
-        $error = urldecode("Post is failed to be removed");
-        header("Location: ../dashboard.php?error=$error");
+        header("Location: ../dashboard.php?tab=post");
     }
 
     mysqli_close($con);

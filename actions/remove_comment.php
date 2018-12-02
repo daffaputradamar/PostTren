@@ -14,10 +14,7 @@ if (isset($_POST['remove-comment'])) {
 
     $query = "UPDATE comments SET deleted_at = CURRENT_TIMESTAMP() WHERE kd_comment = $comment_id";
     if (mysqli_query($con, $query)) {
-        header("Location: ../dashboard.php");
-    } else {
-        $error = urldecode("Comment is failed to be removed");
-        header("Location: ../dashboard.php?error=$error");
+        header("Location: ../dashboard.php?tab=comment");
     }
 
     mysqli_close($con);

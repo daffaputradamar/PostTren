@@ -13,9 +13,9 @@
     $baris = mysqli_fetch_assoc($res);
 
     $render_post = true;
-    if (isset($_POST['report-post']) || (!isset($_POST['report-post']) && !isset($_POST['report-comment']))) {
+    if ($_GET['tab'] === "post" OR !isset($_GET['tab'])) {
         $render_post = true;
-    } else if (isset($_POST['report-comment'])) {
+    } else if ($_GET['tab'] === "comment") {
         $render_post = false;
     }
 ?>
@@ -39,20 +39,16 @@
                                 </div>
                                 <ul class="dashboard__list__list-menu mt-20 ml-20">
                                     <li class="dashboard__list__list-menu__item mb-12 flex">
-                                        <form action="" method="post">
-                                            <button class="btn orange button--primary--outline flex flex--centered--vertical" style="width:230px" name="report-post">
-                                                <i class="material-icons mr-12">comment</i>
-                                                <span>Reported Post</span>
-                                            </button>
-                                        </form>
+                                        <a href="dashboard.php?tab=post" class="btn orange button--primary--outline flex" style="width:230px">
+                                            <i class="material-icons mr-12">comment</i>
+                                            <span>Reported Post</span>
+                                        </a>
                                     </li>
                                     <li class="dashboard__list__list-menu__item mb-12 flex">
-                                        <form action="" method="post">
-                                            <button class="btn orange button--primary--outline flex flex--centered--vertical" style="width:230px" name="report-comment">
-                                                <i class="material-icons mr-12">comment</i>
-                                                <span>Reported Comment</span>
-                                            </button>
-                                        </form>
+                                        <a href="dashboard.php?tab=comment" class="btn orange button--primary--outline flex" style="width:230px">
+                                            <i class="material-icons mr-12">comment</i>
+                                            <span>Reported Comment</span>
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
