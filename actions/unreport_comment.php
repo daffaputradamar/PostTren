@@ -9,18 +9,16 @@ if (!isset($_SESSION['user'])) {
 
 $user_id = $_SESSION['user'];
 
-if(isset($_POST['report-comment'])) {
+if(isset($_POST['unreport-comment'])) {
     $kd_comment = $_POST['kd_comment'];
-    $kd_user = $_POST['kd_user'];
-    $kd_post = $_POST['kd_post'];
 
-    $query = "UPDATE comments SET is_reported = 1 WHERE kd_comment = $kd_comment";
+    $query = "UPDATE comments SET is_reported = 0 WHERE kd_comment = $kd_comment";
 
     if (mysqli_query($con, $query)) {
-        header("Location:../post.php?kd_post=$kd_post");
+        header("Location:../dashboard.php");
     } else {
         $error = urldecode("Comment is failed to be reported");
-        header("Location: ../home.php??kd_post=$kd_post&error=$error&");
+        header("Location: ../dashboard.php?error=$error");
     }
 
     mysqli_close($con);

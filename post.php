@@ -52,32 +52,12 @@
                                         </div>
                                         <div class="col s10">
                                             <div class="flex flex--centered--vertical flex--space-between--horizontal">
-                                            <div class="flex flex--centered--vertical">
-                                                    <a class="black-text mr-20" href="profile.php?kd_user=<?=$poster?>">
-                                                        <div>
-                                                            <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
-                                                            <p><?=$row['username']?></p>
-                                                        </div>
-                                                    </a>
-                                                    <?php
-                                                        if ($user_id !== $poster) {
-                                                        $query = "SELECT * FROM followers WHERE kd_user_followed = $poster AND kd_user_following = $user_id LIMIT 1";
-                                                        $res = mysqli_query($con, $query);
-                                                        if (mysqli_fetch_assoc($res)) {
-                                                    ?>
-                                                        <form action="actions/add_follower.php" method="post">
-                                                            <input type="hidden" name="kd_user" value=<?=$poster?>>
-                                                            <button class="btn btn-small mt-12 orange" type="submit" name="submit-like">following
-                                                            </button>
-                                                        </form>
-                                                    <?php } else { ?>
-                                                        <form action="actions/add_follower.php" method="post">
-                                                            <input type="hidden" name="kd_user" value=<?=$poster?>>
-                                                            <button class="btn btn-small button--rounded mt-12 button--primary--outline" type="submit" name="submit-like">follow
-                                                            </button>
-                                                        </form>
-                                                    <?php } } ?>
-                                                </div>
+                                                <a class="black-text mr-20" href="profile.php?kd_user=<?=$poster?>">
+                                                    <div>
+                                                        <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
+                                                        <p><?=$row['username']?></p>
+                                                    </div>
+                                                </a>
                                                 <div class="flex flex--centered--vertical">
                                                     <?php if ($user_id === $poster) { ?>
                                                         <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-me'><i class="material-icons">more_vert</i></a>
@@ -107,12 +87,62 @@
                                                         </div>
                                                     <?php } ?>
                                                     <?php if ($user_id !== $poster) { ?>
-                                                    <form action="actions/report_post.php" method="post">
-                                                        <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
-                                                        <button type="submit" class="btn grey btn-small button--danger--outline button--danger--outline--thin button--rounded">
-                                                            <i class="tiny material-icons">report</i> 
-                                                        </button>
-                                                    </form>
+                                                        <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-me'><i class="material-icons">more_vert</i></a>
+                                                        <ul id='more-menu-me' class='dropdown-content'>
+                                                            <?php
+                                                                if ($user_id !== $poster) {
+                                                                $query = "SELECT * FROM followers WHERE kd_user_followed = $poster AND kd_user_following = $user_id LIMIT 1";
+                                                                $res = mysqli_query($con, $query);
+                                                                if (mysqli_fetch_assoc($res)) {
+                                                            ?>  
+                                                            <li>
+                                                                <a href="#modal-follow-unfollow" class="black-text modal-trigger"> Unfollow
+                                                                </a>
+                                                            <?php } else { ?>
+                                                                <a href="#modal-follow-unfollow" class="orange-text modal-trigger"> Follow
+                                                                </a>
+                                                            </li>
+                                                            <?php } } ?>
+                                                            <li>
+                                                                <a href="#modal-report" class="red-text modal-trigger">
+                                                                <i class="material-icons">report</i> Report
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <div id="modal-follow-following" class="modal h-120">
+                                                            <div class="modal-content">
+                                                                <form action="actions/add_follower.php" method="post">
+                                                                    <h6>Are you sure you want to follow <?=$row['username']?>?</h6>
+                                                                    <input type="hidden" name="kd_user" value=<?=$poster?>>
+                                                                    <button type="submit" class="btn orange right" name="submit-follow">
+                                                                        Follow
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div id="modal-follow-unfollow" class="modal h-120">
+                                                            <div class="modal-content">
+                                                                <form action="actions/add_follower.php" method="post">
+                                                                    <h6>Are you sure you want to unfollow <?=$row['username']?>?</h6>
+                                                                    <input type="hidden" name="kd_user" value=<?=$poster?>>
+                                                                    <button type="submit" class="btn orange button--primary--outline button--primary--outline--thin right" name="submit-follow">
+                                                                        Unfollow
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div id="modal-report" class="modal h-120">
+                                                            <div class="modal-content">
+                                                                <form action="actions/report_post.php" method="post">
+                                                                    <h6>Are you sure you want to report this post?</h6>
+                                                                    <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
+                                                                    <input type="hidden" name="kd_user" value="<?=$poster?>">
+                                                                    <button type="submit" class="btn red button--danger--outline button--danger--outline--thin right" name="report-post">
+                                                                        Report
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
                                                     <?php } ?>
                                                 </div>
                                             </div>
@@ -139,7 +169,8 @@
                                                     ?>
                                                     <?php
                                                         $query = "SELECT COUNT(kd_comment) as comment_sum FROM comments
-                                                        WHERE kd_post = $post";
+                                                        WHERE kd_post = $post
+                                                        AND deleted_at IS NULL";
                                                         $res = mysqli_query($con, $query);
                                                         $hasil_hitung = mysqli_fetch_array($res);
                                                         if ($hasil_hitung) {
@@ -194,10 +225,12 @@
                                     $query = "SELECT * FROM comments c 
                                         INNER JOIN posts p ON c.kd_post = p.kd_post
                                         INNER JOIN users u ON c.kd_user = u.kd_user
-                                        WHERE c.kd_post = $kd_post
+                                        WHERE c.kd_post = $kd_post AND c.deleted_at IS NULL
                                         ORDER BY c.created_at DESC";
                                     $result = mysqli_query($con, $query);
                                     while ($row = mysqli_fetch_assoc($result)) {
+                                        $comment = $row['kd_comment'];
+                                        $poster_comment = $row['kd_user'];
                                     ?>
                                         <div class="row">
                                             <div class="col s2 center-align">
@@ -205,18 +238,60 @@
                                             </div>
                                             <div class="col s10">
                                                 <div class="flex flex--centered--vertical flex--space-between--horizontal">
+                                                <a class="black-text mr-20" href="profile.php?kd_user=<?=$poster_comment?>">
                                                     <div>
                                                         <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
-                                                    <p><?=$row['username']?></p>
+                                                        <p><?=$row['username']?></p>
                                                     </div>
-                                                    <div class="flex flex--centered--vertical">
-                                                        <form action="actions/report_comment.php" method="post">
-                                                            <input type="hidden" name="kd_comment" value="<?=$row['kd_comment']?>">
-                                                            <button type="submit" class="btn grey btn-small button--danger--outline button--danger--outline--thin button--rounded">
-                                                                <i class="tiny material-icons">report</i> 
-                                                            </button>
-                                                        </form>
-                                                    </div>
+                                                </a>
+                                                <div class="flex flex--centered--vertical">
+                                                    <?php if ($user_id === $poster_comment) { ?>
+                                                        <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-for-me'><i class="material-icons">more_vert</i></a>
+                                                        <ul id='more-menu-for-me' class='dropdown-content'>
+                                                            <li>
+                                                                <a href="#modal-delete-comment" class="red-text modal-trigger">
+                                                                <i class="material-icons">delete</i> Delete
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <div id="modal-delete-comment" class="modal h-120">
+                                                            <div class="modal-content">
+                                                                <form action="actions/delete_comment.php" method="post">
+                                                                    <h6>Are you sure you want to delete this comment?</h6>
+                                                                    <input type="hidden" name="kd_post" value="<?=$post?>">
+                                                                    <input type="hidden" name="kd_comment" value="<?=$comment?>"
+                                                                    <input type="hidden" name="kd_user" value="<?=$poster_comment?>">
+                                                                    <button type="submit" class="btn red button--danger--outline button--danger--outline--thin right" name="delete-comment">
+                                                                        Delete
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                                    <?php if ($user_id !== $poster_comment) { ?>
+                                                        <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-other'><i class="material-icons">more_vert</i></a>
+                                                        <ul id='more-menu-other' class='dropdown-content'>
+                                                            <li>
+                                                                <a href="#modal-report-comment" class="red-text modal-trigger">
+                                                                <i class="material-icons">report</i> Report
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                        <div id="modal-report-comment" class="modal h-120">
+                                                            <div class="modal-content">
+                                                                <form action="actions/report_comment.php" method="post">
+                                                                    <h6>Are you sure you want to report this comment?</h6>
+                                                                    <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
+                                                                    <input type="hidden" name="kd_comment" value="<?=$comment?>">
+                                                                    <input type="hidden" name="kd_user" value="<?=$poster?>">
+                                                                    <button type="submit" class="btn red button--danger--outline button--danger--outline--thin right" name="report-comment">
+                                                                        Report
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
                                                 </div>
                                                 <div class="divider" style="margin: 5px 0"></div>
                                                 <p><?=$row['body_comment']?></p>

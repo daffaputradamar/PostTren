@@ -45,6 +45,7 @@
                             <div class="row">
                                 <div class="col s6">
                                     <blockquote>
+                                        <a href="profile.php?kd_user=<?=$poster?>" class="black-text">
                                         <h6>Posts</h6>
                                         <?php 
                                             $query = "SELECT COUNT(kd_post) as post_sum FROM posts
@@ -57,13 +58,81 @@
                                                 echo '0';
                                             }
                                         ?>
+                                        </a>
                                     </blockquote>
                                 </div>
                                 <div class="col s6">
                                     <blockquote>
+                                        <a href="#modal-my-follower" class="modal-trigger black-text">
                                         <h6>Followers</h6>
-                                        1
+                                        <?php 
+                                            $query = "SELECT COUNT(kd_user_followed) as follower_sum FROM followers
+                                                WHERE kd_user_followed = $kd_user_profile";
+                                            $result = mysqli_query($con, $query);
+                                            $row = mysqli_fetch_array($result);
+                                            if ($row) {
+                                                echo "$row[0]";
+                                            } else {
+                                                echo '0';
+                                            }
+                                        ?>
+                                        </a>
                                     </blockquote>
+                                    <div id="modal-my-follower" class="modal">
+                                        <div class="modal-content">
+                                            <h5>Followers</h5>
+                                            <?php
+                                                $query = "SELECT * FROM followers
+                                                INNER JOIN users ON kd_user_following = kd_user
+                                                WHERE kd_user_followed = $kd_user_profile";
+
+                                                $result = mysqli_query($con, $query);
+
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    $user = $row['kd_user'];
+                                            ?>
+                                                <a href="profile.php?kd_user=<?=$user?>">
+                                                    <div class="card">
+                                                        <div class="card-content">
+                                                            <div class="row">
+                                                                <div class="col s8">
+                                                                    <div class="flex flex--centered--vertical">
+                                                                        <img src="assets/photo_profil/<?=$row['photo_profil']?>" alt="photo profile" class="circle mr-20" width="100" height="100">
+                                                                        <div class="ml-20 black-text">
+                                                                            <h6><?=$row['first_name']?> <?=$row['last_name']?></h6>
+                                                                            <p><?=$row['username']?></p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col s4">
+                                                                    <div class="flex flex--centered--vertical flex--end--horizontal">
+                                                                        <?php if($user !== $user_id) { ?>
+                                                                        <?php
+                                                                            $query = "SELECT * FROM followers WHERE kd_user_followed = $user AND kd_user_following = $user_id LIMIT 1";
+                                                                            $res = mysqli_query($con, $query);
+                                                                            if (mysqli_fetch_assoc($res)) {
+                                                                        ?>
+                                                                            <form action="actions/add_follower.php" method="post">
+                                                                                <input type="hidden" name="kd_user" value=<?=$user?>>
+                                                                                <button class="btn btn-small mt-12 orange" type="submit" name="submit-follow">following
+                                                                                </button>
+                                                                            </form>
+                                                                        <?php } else { ?>
+                                                                            <form action="actions/add_follower.php" method="post">
+                                                                                <input type="hidden" name="kd_user" value=<?=$user?>>
+                                                                                <button class="btn btn-small button--rounded mt-12 button--primary--outline" type="submit" name="submit-follow">follow
+                                                                                </button>
+                                                                            </form>
+                                                                        <?php } } ?>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="flex flex--centered--horizontal">
@@ -75,13 +144,13 @@
                                 ?>
                                     <form action="actions/add_follower.php" method="post">
                                         <input type="hidden" name="kd_user" value=<?=$poster?>>
-                                        <button class="btn btn-small mt-12 orange" type="submit" name="submit-like">following
+                                        <button class="btn btn-small mt-12 orange" type="submit" name="submit-follow">following
                                         </button>
                                     </form>
                                 <?php } else { ?>
                                     <form action="actions/add_follower.php" method="post">
                                         <input type="hidden" name="kd_user" value=<?=$poster?>>
-                                        <button class="btn btn-small button--rounded mt-12 button--primary--outline" type="submit" name="submit-like">follow
+                                        <button class="btn btn-small button--rounded mt-12 button--primary--outline" type="submit" name="submit-follow">follow
                                         </button>
                                     </form>
                                 <?php } } ?>
@@ -168,12 +237,26 @@
                                                         </div>
                                                 <?php } ?>
                                                 <?php if ($user_id !== $poster) { ?>
-                                                <form action="actions/report_post.php" method="post">
-                                                    <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
-                                                    <button type="submit" class="btn grey btn-small button--danger--outline button--danger--outline--thin button--rounded">
-                                                        <i class="tiny material-icons">report</i> 
-                                                    </button>
-                                                </form>
+                                                    <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-other'><i class="material-icons">more_vert</i></a>
+                                                    <ul id='more-menu-other' class='dropdown-content'>
+                                                        <li>
+                                                            <a href="#modal-report" class="red-text modal-trigger">
+                                                            <i class="material-icons">report</i> Report
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <div id="modal-report" class="modal h-120">
+                                                        <div class="modal-content">
+                                                            <form action="actions/report_post.php" method="post">
+                                                                <h6>Are you sure you want to report this post?</h6>
+                                                                <input type="hidden" name="kd_post" value="<?=$row['kd_post']?>">
+                                                                <input type="hidden" name="kd_user" value="<?=$poster?>">
+                                                                <button type="submit" class="btn red button--danger--outline button--danger--outline--thin right" name="report-post">
+                                                                    Report
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 <?php } ?>
                                             </div>
                                         </div>
@@ -200,7 +283,8 @@
                                                 ?>
                                                 <?php
                                                     $query = "SELECT COUNT(kd_comment) as comment_sum FROM comments
-                                                        WHERE kd_post = $post";
+                                                        WHERE kd_post = $post
+                                                        AND deleted_at IS NULL";
                                                         $res = mysqli_query($con, $query);
                                                         $hasil_hitung = mysqli_fetch_array($res);
                                                         if ($hasil_hitung) {

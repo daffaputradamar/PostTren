@@ -8,8 +8,25 @@
         <div class="nav-wrapper white">
             <div class="container">
                 <a href="home.php" class="brand-logo orange-text center navLogo">SocialTren</a>
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                <ul id="nav-mobile">
                     <li><a class="orange-text" href="home.php"><i class="material-icons left">home</i>Home</a></li>
+                    <li>    
+                        <form action="search.php" method="get">
+                            <div class="center row">
+                                <div class="col s12">
+                                    <div class="row">
+                                        <div class="input-field col s8 orange-text">
+                                            <i class="orange-text material-icons prefix top-0" style="top:0;">search</i>
+                                            <input type="text" name="username" placeholder="Find People" class="orange-text" >
+                                        </div>
+                                        <div class="col-4">
+                                            <button class="btn btn-small orange button--primary--outline button--primary--outline--thin">Find</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </li>   
                 </ul>
                 <ul id="nav-mobile" class="right">
                     <li class="mr-20">

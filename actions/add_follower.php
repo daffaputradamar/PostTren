@@ -7,7 +7,7 @@ if (!isset($_SESSION['user'])) {
 }
 $user_id = $_SESSION['user'];
 
-if(isset($_POST['submit-like'])) {
+if(isset($_POST['submit-follow'])) {
     $kd_user = $_POST['kd_user'];
 
     if($user_id === $kd_user) {

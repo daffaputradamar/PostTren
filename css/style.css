@@ -3,8 +3,16 @@ body {
   /* overflow: hidden; */
 }
 
-.body--overflow-hidden {
+.overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-y-hidden {
+  overflow-y: hidden;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
 }
 
 .flex {
@@ -19,8 +27,24 @@ body {
   justify-content: center;
 }
 
+.flex--stretch--horizontal {
+  justify-content: stretch;
+}
+
+.flex--space-around--horizontal {
+  justify-content: space-around;
+}
+
+.flex--space-evenly--horizontal {
+  justify-content: space-evenly;
+}
+
 .flex--space-between--horizontal {
   justify-content: space-between;
+}
+
+.flex--end--horizontal {
+  justify-content: flex-end;
 }
 
 .container {
@@ -63,8 +87,16 @@ blockquote {
   font-size: 0.9rem;
 }
 
+.top-0 {
+  top: 0;
+}
+
 .h-120 {
   height: 120px;
+}
+
+.h-100-vh {
+  height: 100vh;
 }
 
 .h-100 {
@@ -77,6 +109,10 @@ blockquote {
 
 .w-100 {
   width: 100%;
+}
+
+.mt-5 {
+  margin-top: 5px;
 }
 
 .mt-12 {
@@ -109,6 +145,10 @@ blockquote {
 
 .ml-20 {
   margin-left: 20px;
+}
+
+.ml-30 {
+  margin-left: 30px;
 }
 
 .mr-12 {
@@ -222,4 +262,12 @@ blockquote {
 
 .clearfix {
   clear: both;
+}
+
+#sidebar {
+  overflow-y: hidden;
+}
+
+#sidebar:hover {
+  overflow-y: scroll;
 }
