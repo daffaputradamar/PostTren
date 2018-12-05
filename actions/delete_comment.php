@@ -19,7 +19,7 @@ if (isset($_POST['delete-comment'])) {
         header("Location: ../home.php?error=$error");
     }
 
-    $query = "UPDATE comments SET deleted_at = CURRENT_TIMESTAMP() WHERE kd_comment = $kd_comment";
+    $query = "UPDATE comments SET deleted_at = CURRENT_TIMESTAMP(), is_deleted = 1 WHERE kd_comment = $kd_comment";
     if (mysqli_query($con, $query)) {
         header("Location: ../post.php?kd_post=$kd_post");
     } else {

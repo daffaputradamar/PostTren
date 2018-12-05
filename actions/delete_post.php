@@ -18,7 +18,7 @@ if (isset($_POST['delete-post'])) {
         header("Location: ../home.php?error=$error");
     }
 
-    $query = "UPDATE posts SET deleted_at = CURRENT_TIMESTAMP() WHERE kd_post = $post_id";
+    $query = "UPDATE posts SET deleted_at = CURRENT_TIMESTAMP(), is_deleted = 1 WHERE kd_post = $post_id";
     if (mysqli_query($con, $query)) {
         header("Location: ../home.php");
     } else {

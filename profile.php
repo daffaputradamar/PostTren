@@ -49,7 +49,7 @@
                                         <h6>Posts</h6>
                                         <?php 
                                             $query = "SELECT COUNT(kd_post) as post_sum FROM posts
-                                                WHERE kd_user = $kd_user_profile AND deleted_at IS NULL";
+                                                WHERE kd_user = $kd_user_profile AND deleted_at IS NULL AND p.is_deleted = 0";
                                             $result = mysqli_query($con, $query);
                                             $post_sum = mysqli_fetch_array($result);
                                             if ($post_sum) {

@@ -171,6 +171,7 @@
                                     INNER JOIN users u ON p.kd_user = u.kd_user
                                     WHERE p.deleted_at IS NULL 
                                     AND (p.kd_user IN (SELECT kd_user_followed from followers WHERE kd_user_following = $user_id) OR p.kd_user = $user_id)
+                                    AND p.is_deleted = 0
                                     ORDER BY created_at DESC";
                                 $result = mysqli_query($con, $query);
                                 while ($row = mysqli_fetch_assoc($result)) {

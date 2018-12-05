@@ -7,8 +7,8 @@ if (isset($_POST['register'])) {
     $first_name = $_POST['first-name'];
     $last_name = $_POST['last-name'];
     $username = $_POST['username'];
-    $password = $_POST['password'];
-
+    $password = md5($_POST['password']);
+    // die($password);
     $query = "INSERT INTO users (username, password, first_name, last_name) 
             VALUES ('$username', '$password', '$first_name', '$last_name')";
 
@@ -17,7 +17,7 @@ if (isset($_POST['register'])) {
         $_SESSION['user'] = $id;
         header('Location: ../home.php');
     } else {
-        $error = urldecode("There is something wrong with the regitration");
+        $error = urldecode("There is something wrong with the registration");
         header("Location: ../index.php?error=$error");
     }
     mysqli_close($con);

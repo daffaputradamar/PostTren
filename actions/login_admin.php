@@ -7,7 +7,7 @@ if (isset($_POST['login-admin'])) {
     if (!empty($_POST['username']) || !empty($_POST['password'])) {
 
         $username = $_POST['username'];
-        $password = $_POST['password'];
+        $password = md5($_POST['password']);
     
         $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password' AND is_admin = 1";
         $result = mysqli_query($con, $query);

@@ -39,7 +39,7 @@
                                 <?php 
                                     $query = "SELECT * FROM posts p 
                                         INNER JOIN users u ON p.kd_user = u.kd_user
-                                        WHERE kd_post = $kd_post AND p.deleted_at IS NULL
+                                        WHERE kd_post = $kd_post AND p.deleted_at IS NULL AND p.is_deleted = 0
                                         ORDER BY created_at DESC";
                                     $result = mysqli_query($con, $query);
                                     while ($row = mysqli_fetch_assoc($result)) {
@@ -225,7 +225,7 @@
                                     $query = "SELECT * FROM comments c 
                                         INNER JOIN posts p ON c.kd_post = p.kd_post
                                         INNER JOIN users u ON c.kd_user = u.kd_user
-                                        WHERE c.kd_post = $kd_post AND c.deleted_at IS NULL
+                                        WHERE c.kd_post = $kd_post AND c.deleted_at IS NULL AND c.is_deleted = 0
                                         ORDER BY c.created_at DESC";
                                     $result = mysqli_query($con, $query);
                                     while ($row = mysqli_fetch_assoc($result)) {
