@@ -49,7 +49,7 @@ $kd_user_profile = $_GET['kd_user'];
                                         <h6>Posts</h6>
                                         <?php 
                                         $query = "SELECT COUNT(kd_post) as post_sum FROM posts
-                                                WHERE kd_user = $kd_user_profile AND deleted_at IS NULL AND p.is_deleted = 0";
+                                                WHERE kd_user = $kd_user_profile AND deleted_at IS NULL AND is_deleted = 0";
                                         $result = mysqli_query($con, $query);
                                         $post_sum = mysqli_fetch_array($result);
                                         if ($post_sum) {
@@ -197,9 +197,20 @@ $kd_user_profile = $_GET['kd_user'];
                             <?php 
                             $query = "SELECT * FROM posts p 
                                     INNER JOIN users u ON p.kd_user = u.kd_user
-                                    WHERE p.kd_user = $kd_user_profile AND p.deleted_at IS NULL
+                                    WHERE p.kd_user = $kd_user_profile AND p.deleted_at IS NULL AND is_deleted = 0
                                     ORDER BY created_at DESC";
                             $result = mysqli_query($con, $query);
+                            if (mysqli_num_rows($result) == 0) { ?>
+                                <div class="card center-align">
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            <p class="card-text">No Post Yet</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            <?php 
+                        } else {
                             while ($row = mysqli_fetch_assoc($result)) {
                                 $post = $row['kd_post'];
                                 $poster = $row['kd_user'];
@@ -346,7 +357,8 @@ $kd_user_profile = $_GET['kd_user'];
                             </div>
                         <?php 
                     }
-                    ?>    
+                }
+                ?>    
                     </div>
                 </div>
             </div>
