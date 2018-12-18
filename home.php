@@ -188,7 +188,7 @@ $user_id = $_SESSION["user"];
                                         <br><div class="divider"></div><br>
                                         <div class="flex flex--centered--vertical flex--space-evenly--horizontal">
                                         <?php
-                                        $query = "SELECT * FROM users
+                                        $queryyyy = "SELECT * FROM users
                                     WHERE kd_user
                                     NOT IN (
                                         SELECT kd_user_followed
@@ -196,14 +196,14 @@ $user_id = $_SESSION["user"];
                                         WHERE kd_user_following = $user_id
                                     ) AND kd_user != $user_id AND kd_user != 1
                                     ORDER BY RAND() LIMIT 3";
-                                        $result = mysqli_query($con, $query);
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            $poster = $row['kd_user'];
+                                        $resultttt = mysqli_query($con, $queryyyy);
+                                        while ($rowww = mysqli_fetch_assoc($resultttt)) {
+                                            $poster = $rowww['kd_user'];
                                             ?>
                                         <div>
-                                            <img src="assets/photo_profil/<?= $row['photo_profil'] ?>" class="circle" alt="photo profile" width="60" height="60">
+                                            <img src="assets/photo_profil/<?= $rowww['photo_profil'] ?>" class="circle" alt="photo profile" width="60" height="60">
                                             <a class="black-text" href="profile.php?kd_user=<?= $poster ?>">
-                                                <p><?= $row['username'] ?></p>
+                                                <p><?= $rowww['username'] ?></p>
                                             </a>
                                             <br>
                                             <form action="actions/add_follower.php" method="post">
@@ -241,7 +241,7 @@ $user_id = $_SESSION["user"];
                                                     </div>
                                                 </a>
                                                 <div class="flex flex--centered--vertical">
-                                                    <?php if ($user_id === $poster) { ?>
+                                                    <?php if ($user_id == $poster) { ?>
                                                         <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-me'><i class="material-icons">more_vert</i></a>
                                                         <ul id='more-menu-me' class='dropdown-content'>
                                                             <li class="center-align">
@@ -269,18 +269,17 @@ $user_id = $_SESSION["user"];
                                                         </div>
                                                     <?php 
                                                 } ?>
-                                                    <?php if ($user_id !== $poster) { ?>
+                                                    <?php if ($user_id != $poster) { ?>
                                                         <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-other'><i class="material-icons">more_vert</i></a>
                                                         <ul id='more-menu-other' class='dropdown-content'>
                                                             <?php
-                                                            if ($user_id !== $poster) {
+                                                            if ($user_id != $poster) {
                                                                 $query = "SELECT * FROM followers WHERE kd_user_followed = $poster AND kd_user_following = $user_id LIMIT 1";
                                                                 $res = mysqli_query($con, $query);
                                                                 if (mysqli_fetch_assoc($res)) {
                                                                     ?>  
-                                                            <li>
-                                                                <a href="#modal-follow-unfollow" class="black-text modal-trigger"> Unfollow
-                                                                </a>
+                                                            <li class="center-align">
+                                                                <a href="#modal-follow-unfollow" class="black-text modal-trigger">&nbsp; &nbsp; Unfollow</a>
                                                             <?php 
                                                         } else { ?>
                                                                 <a href="#modal-follow-unfollow" class="orange-text modal-trigger"> Follow

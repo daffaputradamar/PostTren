@@ -107,7 +107,7 @@ $kd_user_profile = $_GET['kd_user'];
                                                                 <div class="col s4">
                                                                     <div class="flex flex--centered--vertical flex--end--horizontal">
                                                                         <?php 
-                                                                        if ($user_id !== $user) {
+                                                                        if ($user_id != $user) {
                                                                             ?>
                                                                         <?php
                                                                         $query = "SELECT * FROM followers WHERE kd_user_followed = $user AND kd_user_following = $user_id LIMIT 1";
@@ -143,7 +143,7 @@ $kd_user_profile = $_GET['kd_user'];
                             </div>
                             <div class="flex flex--centered--horizontal">
                                 <?php
-                                if ($user_id !== $poster) {
+                                if ($user_id != $poster) {
                                     $query = "SELECT * FROM followers WHERE kd_user_followed = $poster AND kd_user_following = $user_id LIMIT 1";
                                     $res = mysqli_query($con, $query);
                                     if (mysqli_fetch_assoc($res)) {
@@ -168,7 +168,7 @@ $kd_user_profile = $_GET['kd_user'];
                     </div>
                 </div>
                 <div class="col s8">
-                    <?php if ($user_id === $kd_user_profile) { ?>
+                    <?php if ($user_id == $kd_user_profile) { ?>
                     <div class="card">
                         <div class="card-content">
                             <div class="row">
@@ -230,7 +230,7 @@ $kd_user_profile = $_GET['kd_user'];
                                                 </div>
                                             </a>
                                             <div class="flex flex--centered--vertical">
-                                                <?php if ($user_id === $poster) { ?>
+                                                <?php if ($user_id == $poster) { ?>
                                                     <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-me'><i class="material-icons">more_vert</i></a>
                                                         <ul id='more-menu-me' class='dropdown-content'>
                                                             <li class="center-align">
@@ -258,7 +258,7 @@ $kd_user_profile = $_GET['kd_user'];
                                                         </div>
                                                 <?php 
                                             } ?>
-                                                <?php if ($user_id !== $poster) { ?>
+                                                <?php if ($user_id != $poster) { ?>
                                                     <a class='dropdown-trigger grey-text' href='#' data-target='more-menu-other'><i class="material-icons">more_vert</i></a>
                                                     <ul id='more-menu-other' class='dropdown-content'>
                                                         <li>

@@ -1,13 +1,13 @@
 <?php
 
-include '../helper/connection.php'; 
+include '../helper/connection.php';
 session_start();
 
 if (!isset($_SESSION['user'])) {
     header('Location: index.php');
 }
 
-if(isset($_POST['submit-post'])) {
+if (isset($_POST['submit-post'])) {
     $kd_user = $_SESSION['user'];
     $code = $_FILES['profile-photo']["error"];
     if ($code !== 4) {
@@ -37,9 +37,10 @@ if(isset($_POST['submit-post'])) {
             $error = urldecode("Check your uploaded file extension (*jpeg, *jpg, *gif, *png)");
             header("Location:../settings.php?error=$error");
         }
-        
-        if(move_uploaded_file($tmp, $path)) {
+
+        if (move_uploaded_file($tmp, $path)) {
             $query = "UPDATE users SET photo_profil = '$nama_baru' WHERE kd_user = $kd_user";
+            // die($query);
             if (mysqli_query($con, $query)) {
                 header("Location:../settings.php");
             } else {
